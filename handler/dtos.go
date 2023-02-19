@@ -1,6 +1,9 @@
 package handler
 
-import "github.com/tahmooress/book-repository/pkg/validator"
+import (
+	"github.com/tahmooress/book-repository/entities"
+	"github.com/tahmooress/book-repository/pkg/validator"
+)
 
 type LoginRequest struct {
 	Email    string `json:"email"`
@@ -54,11 +57,5 @@ type RegisterResponse struct {
 }
 
 type SearchBookResult struct {
-	ID         string   `json:"id"`
-	ImageName  string   `json:"image_name"`
-	Title      string   `json:"title"`
-	Content    string   `json:"content"`
-	Slug       string   `json:"slug"`
-	Publishers []string `json:"publishers"`
-	Authors    []string `json:"authors"`
+	Books []*entities.Book `json:"books"`
 }

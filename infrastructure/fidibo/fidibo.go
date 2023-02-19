@@ -56,14 +56,42 @@ func (f *FidiboSearchService) SearchBook(ctx context.Context, query string) ([]*
 		return nil, fmt.Errorf("FidiboSearchService: SearchBook() >> %w", err)
 	}
 
-	var result BooksResponse
+	var books BooksResponse
 
-	err = json.Unmarshal(b, &result)
+	err = json.Unmarshal(b, &books)
 	if err != nil {
 		return nil, fmt.Errorf("FidiboSearchService: SearchBook() >> %w", err)
 	}
 
-	fmt.Printf("%#+v ", result)
+	return adapter(books), nil
+}
 
-	return nil, nil
+func adapter(input BooksResponse) []*entities.Book {
+	books := make([]*entities.Book, len(input.Books.Hits.Hits))
+
+	for i, obj := range input.Books.Hits.Hits {
+		books[i] = &entities.Book{
+			ID:         obj.Source.ID,
+			ImageName:  obj.Source.ImageName,
+			Title:      obj.Source.Title,
+			Content:    obj.Source.Content,
+			Slug:       obj.Source.Slug,
+			Publishers: entities.Title(obj.Source.Publishers),
+			Authors:    adaptAuthors(obj.Source.Authors),
+		}
+	}
+
+	return books
+}
+
+func adaptAuthors(au []Author) []entities.Author {
+	r := make([]entities.Author, len(au))
+
+	for i := range au {
+		r[i] = entities.Author{
+			Name: au[i].Name,
+		}
+	}
+
+	return r
 }

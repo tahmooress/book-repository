@@ -1,31 +1,19 @@
 package fidibo
 
-type Book struct {
-	Index  string  `json:"_index"`
-	Type   string  `json:"_type"`
-	ID     string  `json:"_id"`
-	Score  float64 `json:"_score"`
-	Source Source  `json:"_source"`
-}
-
-type Shards struct {
-	Total      int `json:"total"`
-	Successful int `json:"successful"`
-	Skipped    int `json:"skipped"`
-	Failed     int `json:"failed"`
-}
-
-type Hits struct {
-	Total    int     `json:"total"`
-	MaxScore float64 `json:"max_score"`
-	Hits     []Book  `json:"hits"`
-}
-
 type BooksResponse struct {
-	Took     int    `json:"took"`
-	TimedOut bool   `json:"timed_out"`
-	Shards   Shards `json:"_shards"`
-	Hits     Hits   `json:"hits"`
+	Books Books `json:"books"`
+}
+
+type Books struct {
+	Hits Hit `json:"hits"`
+}
+
+type Hit struct {
+	Hits []Obj `json:"hits"`
+}
+
+type Obj struct {
+	Source Source `json:"_source"`
 }
 
 type Publisher struct {
@@ -39,7 +27,6 @@ type Author struct {
 type Source struct {
 	ImageName  string    `json:"image_name"`
 	Publishers Publisher `json:"publishers"`
-	Weight     int       `json:"weight"`
 	ID         string    `json:"id"`
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`

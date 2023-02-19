@@ -32,7 +32,7 @@ func (d *Database) GetByEmail(ctx context.Context, email string) (*entities.User
 }
 
 func (d *Database) Set(ctx context.Context, user *entities.User) error {
-	query := `insert into users(id, name, email, password) value($1,$2,$3,$4)`
+	query := `insert into users(id, name, email, password) values($1,$2,$3,$4)`
 
 	_, err := d.db.ExecContext(ctx, query, user.ID, user.Name, user.Email, user.Password)
 	if err != nil {

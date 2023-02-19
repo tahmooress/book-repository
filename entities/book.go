@@ -8,8 +8,16 @@ type Book struct {
 	Title      string
 	Content    string
 	Slug       string
-	Publishers []string
-	Authors    []string
+	Publishers Title
+	Authors    []Author
+}
+
+type Title struct {
+	Title string
+}
+
+type Author struct {
+	Name string
 }
 
 type BookUseCase interface {

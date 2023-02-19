@@ -1,0 +1,44 @@
+version: '3'
+services:
+  app:
+    container_name: app
+    env_file: .env
+    build: .
+    ports: 
+      - "80:8080" 
+    restart: on-failure
+    volumes:
+      - api:/usr/src/app/
+    depends_on:
+      - my_postgres          # Uncomment this when using postgres.
+      - my_redis           # Uncomment this when using mysql.
+
+  my_postgres:
+    image: postgres:latest
+    container_name: db_postgres
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}  
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - DATABASE_HOST=${DATABASE_ADDR} 
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+
+  my_redis:
+    container_name: cache_redis
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+       - ~/.docker-conf/redis/data/:/data     
+    ports:
+      - "6379:6379" 
+
+volumes:
+  api:
+  database_postgres:                  # Uncomment this when using postgres.
+  # database_mysql:                   # Uncomment this when using mysql.
+
+# Networks to be created to facilitate communication between containers

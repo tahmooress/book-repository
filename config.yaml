@@ -1,0 +1,19 @@
+---
+  http_ip: localhost
+  http_port: 8080
+  http_read: 30s
+  http_writ: 30s
+  database_host:
+  database_port:
+  database_name:
+  database_user:
+  database_password:
+  jwt_secret_key:
+  jwt_expiration:
+  redis_address:
+  redis_password:
+  redis_ttl:
+  log_path: ./orders.log
+  log_level: info
+
+

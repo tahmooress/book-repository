@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  database:
+    container_name: my_postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_ADDR}
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - my_special_network
+  redis:
+    container_name: my_redis
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+       - ~/.docker-conf/redis/data/:/data     
+    ports:
+      - "6379:6379" 
+    networks:
+      - my_special_network       
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    depends_on:
+      - database
+    networks:
+      - my_special_network
+    ports:
+    - "8080:8080"
+volumes:
+  data:
+networks:
+  my_special_network:
+    driver: bridge
+      
+        
